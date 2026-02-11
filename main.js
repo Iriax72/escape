@@ -4,8 +4,8 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const triangleSize = 60; // taille d'un petit triangle
-// Hauteur d'un triangle équilatéral = côté * √3/2
-const triangleHeight = triangleSize * Math.sqrt(3) / 2;
+// Hauteur d'un triangle équilatéral = √(3/4 * cote)
+const triangleHeight = Math.sqrt(3/4 * triangleSize);
 const numRows = 7; // Configuration pour 7 lignes (1+2+3+4+5+6+7 = 28 triangles pointant vers le bas + 21 vers le haut = 49 total)
 
 // Calculer les dimensions du canvas
@@ -27,11 +27,6 @@ for (let row = 0; row < numRows; row++) {
         // Position x: décalée vers la droite pour chaque ligne
         const x = startX + (numRows - row - 1) * (triangleSize / 2) + col * triangleSize;
         const y = startY + row * triangleHeight;
-
-        // Triangle pointe vers le bas
-        const triangle = new Case(x, y, triangleSize, false);
-        triangles.push(triangle);
-        triangle.draw(ctx);
     
         // Ajouter un triangle pointe vers le haut entre deux triangles (sauf pour la dernière position)
         if (col < trianglesInRow - 1) {
@@ -44,5 +39,10 @@ for (let row = 0; row < numRows; row++) {
         triangles.push(reversedTriangle);
         reversedTriangle.draw(ctx);
         }
+
+        // Ajouter un triangle qui pointe vers le bas
+        const triangle = new Case(x, y, triangleSize, false);
+        triangles.push(triangle);
+        triangle.draw(ctx);
     }
 }
