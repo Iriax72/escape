@@ -4,8 +4,8 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const triangleSize = 60; // taille d'un petit triangle
-// Hauteur d'un triangle équilatéral = √(3/4 * cote)
-const triangleHeight = Math.sqrt(3/4 * triangleSize);
+// Hauteur d'un triangle équilatéral = (√3 / 2) * côté
+const triangleHeight = Math.sqrt(3) / 2 * triangleSize;
 const numRows = 7; // Configuration pour 7 lignes (1+2+3+4+5+6+7 = 28 triangles pointant vers le bas + 21 vers le haut = 49 total)
 
 // Calculer les dimensions du canvas
