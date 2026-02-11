@@ -6,7 +6,7 @@ const ctx = canvas.getContext('2d');
 const triangleSize = 60; // taille d'un petit triangle
 // Hauteur d'un triangle équilatéral = (√3 / 2) * côté
 const triangleHeight = Math.sqrt(3) / 2 * triangleSize;
-const numRows = 7; // Configuration pour 7 lignes (1+2+3+4+5+6+7 = 28 triangles pointant vers le bas + 21 vers le haut = 49 total)
+const numRows = 7; // base de 7 triangles
 
 // Calculer les dimensions du canvas
 const canvasWidth = numRows * triangleSize + 100;
@@ -19,21 +19,19 @@ const startY = 50;
 
 const triangles = []; // Tableau pour stocker toutes les instances de Case
 
-// Générer les triangles ligne par ligne
+// Générer un grand triangle inversé (base en haut, apex en bas)
 for (let row = 0; row < numRows; row++) {
-    const trianglesInRow = row;
+    // Pour un triangle inversé, la première ligne (row=0) contient numRows triangles,
+    // puis décroît jusqu'à 1.
+    const trianglesInRow = numRows - row;
 
-    // Base x pour la première colonne de cette ligne
-    const baseX = startX + (numRows - row - 1) * (triangleSize / 2);
+    // Base x pour la première colonne de cette ligne — on décale vers la droite
+    // à chaque ligne pour centrer la ligne sous la précédente
+    const baseX = startX + row * (triangleSize / 2);
     const y = startY + row * triangleHeight;
 
-    // Ajouter un triangle inversé au début de la ligne
-    const startReversed = new Case(baseX - triangleSize / 2, y, triangleSize, true);
-    triangles.push(startReversed);
-    startReversed.draw(ctx);
-
     for (let col = 0; col < trianglesInRow; col++) {
-        // Position x pour le triangle pointant vers le bas
+        // Position x pour le triangle principal de la colonne
         const x = baseX + col * triangleSize;
 
         // Ajouter un triangle qui pointe vers le bas
@@ -48,10 +46,4 @@ for (let row = 0; row < numRows; row++) {
             reversedTriangle.draw(ctx);
         }
     }
-
-    // Ajouter un triangle inversé à la fin de la ligne
-    const endReversedX = baseX + (trianglesInRow - 1) * triangleSize + triangleSize / 2;
-    const endReversed = new Case(endReversedX, y, triangleSize, true);
-    triangles.push(endReversed);
-    endReversed.draw(ctx);
 }
