@@ -30,11 +30,6 @@ for (let row = 0; row < numRows; row++) {
     const baseX = startX + row * (triangleSize / 2);
     const y = startY + row * triangleHeight;
 
-    // Ajouter un triangle inversé (point-up) au début de la ligne
-    const startReversed = new Case(baseX - triangleSize / 2, y, triangleSize, true);
-    triangles.push(startReversed);
-    startReversed.draw(ctx);
-
     for (let col = 0; col < trianglesInRow; col++) {
         // Position x pour le triangle principal de la colonne
         const x = baseX + col * triangleSize;
@@ -51,10 +46,4 @@ for (let row = 0; row < numRows; row++) {
             reversedTriangle.draw(ctx);
         }
     }
-
-    // Ajouter un triangle inversé (point-up) à la fin de la ligne
-    const endReversedX = baseX + (trianglesInRow - 1) * triangleSize + triangleSize / 2;
-    const endReversed = new Case(endReversedX, y, triangleSize, true);
-    triangles.push(endReversed);
-    endReversed.draw(ctx);
 }
