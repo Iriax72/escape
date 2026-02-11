@@ -21,7 +21,7 @@ const triangles = []; // Tableau pour stocker toutes les instances de Case
 
 // Générer les triangles ligne par ligne
 for (let row = 0; row < numRows; row++) {
-    const trianglesInRow = row + 1;
+    const trianglesInRow = row - 1;
 
     // Base x pour la première colonne de cette ligne
     const baseX = startX + (numRows - row - 1) * (triangleSize / 2);
