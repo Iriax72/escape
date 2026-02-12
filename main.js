@@ -19,7 +19,7 @@ const startY = 50;
 
 const triangles = []; // Tableau pour stocker toutes les instances de Case
 const triangleImage = new Image();
-triangleImage.src = './assets/images/t.png';
+triangleImage.src = './assets/images/triangle.png';
 
 triangleImage.onerror = function() {
     console.error("Erreur de chargement de l'image du triangle.");
