@@ -31,7 +31,7 @@ triangleImage.onload = function() {
 
 function generateTriangles () {
     // Générer un grand triangle inversé (base en haut, apex en bas)
-    for (let row = 0; row < numRows; row++) {
+    for (let row = 0; row < numRows - 1; row++) {
         // Pour un triangle inversé, la première ligne (row=0) contient numRows triangles,
         // puis décroît jusqu'à 1.
         const trianglesInRow = numRows - row;
