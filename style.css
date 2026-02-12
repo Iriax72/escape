@@ -16,7 +16,7 @@ body {
 }
     
 canvas {
-    border: 2px solid forestgreen;
+    border: 8px solid forestgreen;
     background-color: sandybrown;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
