@@ -18,32 +18,44 @@ const startX = (canvasWidth - numRows * triangleSize) / 2;
 const startY = 50;
 
 const triangles = []; // Tableau pour stocker toutes les instances de Case
+const triangleImage = new Image();
+triangleImage.src = './assets/images/triangle.png';
 
-// Générer un grand triangle inversé (base en haut, apex en bas)
-for (let row = 0; row < numRows; row++) {
-    // Pour un triangle inversé, la première ligne (row=0) contient numRows triangles,
-    // puis décroît jusqu'à 1.
-    const trianglesInRow = numRows - row;
+triangleImage.onerror = function() {
+    console.error("Erreur de chargement de l'image du triangle.");
+}
 
-    // Base x pour la première colonne de cette ligne — on décale vers la droite
-    // à chaque ligne pour centrer la ligne sous la précédente
-    const baseX = startX + row * (triangleSize / 2);
-    const y = startY + row * triangleHeight;
+triangleImage.onload = function() {
+    generateTriangles();
+}
 
-    for (let col = 0; col < trianglesInRow; col++) {
-        // Position x pour le triangle principal de la colonne
-        const x = baseX + col * triangleSize;
+function generateTriangles () {
+    // Générer un grand triangle inversé (base en haut, apex en bas)
+    for (let row = 0; row < numRows; row++) {
+        // Pour un triangle inversé, la première ligne (row=0) contient numRows triangles,
+        // puis décroît jusqu'à 1.
+        const trianglesInRow = numRows - row;
 
-        // Ajouter un triangle qui pointe vers le bas
-        const triangle = new Case(x, y, triangleSize, false);
-        triangles.push(triangle);
-        triangle.draw(ctx);
+        // Base x pour la première colonne de cette ligne — on décale vers la droite
+        // à chaque ligne pour centrer la ligne sous la précédente
+        const baseX = startX + row * (triangleSize / 2);
+        const y = startY + row * triangleHeight;
 
-        // Ajouter un triangle pointe vers le haut entre deux triangles (sauf après le dernier)
-        if (col < trianglesInRow - 1) {
-            const reversedTriangle = new Case(x + triangleSize / 2, y, triangleSize, true);
-            triangles.push(reversedTriangle);
-            reversedTriangle.draw(ctx);
+        for (let col = 0; col < trianglesInRow; col++) {
+            // Position x pour le triangle principal de la colonne
+            const x = baseX + col * triangleSize;
+
+            // Ajouter un triangle qui pointe vers le bas
+            const triangle = new Case(x, y, triangleSize, triangleImage);
+            triangles.push(triangle);
+            triangle.draw(ctx);
+
+            // Ajouter un triangle pointe vers le haut entre deux triangles (sauf après le dernier)
+            if (col < trianglesInRow - 1) {
+                const reversedTriangle = new Case(x + triangleSize / 2, y, triangleSize, triangleImage, true);
+                triangles.push(reversedTriangle);
+                reversedTriangle.draw(ctx);
+            }
         }
     }
 }
