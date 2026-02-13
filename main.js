@@ -65,20 +65,20 @@ function drawBorder() {
     ctx.beginPath();
 
     // coin haut gauche
-    topLeftX = startX + (rows - 1) * (triangleSize / 2);
-    topLeftY = startY;
+    const topLeftX = startX + (numRows - 1) * (triangleSize / 2);
+    const topLeftY = startY;
 
     // coin haut droit
-    topRightX = startX + (rows -1) * (triangleSize / 2) + triangleSize * (rows - 1);
-    topRightY = startY;
+    const topRightX = startX + (numRows -1) * (triangleSize / 2) + triangleSize * (numRows - 1);
+    const topRightY = startY;
 
     // coin bas
-    bottomX = startX + (rows - 1) * (triangleSize / 2) + triangleSize * (rows - 1) / 2;
-    bottomY = startY + (rows - 1) * triangleHeight;
+    const bottomX = startX + (numRows - 1) * (triangleSize / 2) + triangleSize * (numRows - 1) / 2;
+    const bottomY = startY + (numRows - 1) * triangleHeight;
 
     // Dessiner les lignes entre les coins
     ctx.moveTo(topLeftX, topLeftY);
-    ctx.lineTo(topRightX, tropRightY);
+    ctx.lineTo(topRightX, topRightY);
     ctx.lineTo(bottomX, bottomY);
     ctx.closePath();
     ctx.strokeStyle = 'black';
