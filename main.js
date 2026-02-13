@@ -27,6 +27,7 @@ triangleImage.onerror = function() {
 
 triangleImage.onload = function() {
     generateTriangles();
+    drawBorder();
 }
 
 function generateTriangles () {
@@ -58,4 +59,29 @@ function generateTriangles () {
             }
         }
     }
+}
+
+function drawBorder() {
+    ctx.beginPath();
+
+    // coin haut gauche
+    topLeftX = startX + (rows - 1) * (triangleSize / 2);
+    topLeftY = startY;
+
+    // coin haut droit
+    topRightX = startX + (rows -1) * (triangleSize / 2) + triangleSize * (rows - 1);
+    topRightY = startY;
+
+    // coin bas
+    bottomX = startX + (rows - 1) * (triangleSize / 2) + triangleSize * (rows - 1) / 2;
+    bottomY = startY + (rows - 1) * triangleHeight;
+
+    // Dessiner les lignes entre les coins
+    ctx.moveTo(topLeftX, topLeftY);
+    ctx.lineTo(topRightX, tropRightY);
+    ctx.lineTo(bottomX, bottomY);
+    ctx.closePath();
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 5;
+    ctx.stroke();
 }
