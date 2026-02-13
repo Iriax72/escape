@@ -82,6 +82,6 @@ function drawBorder() {
     ctx.lineTo(bottomX, bottomY);
     ctx.closePath();
     ctx.strokeStyle = 'black';
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 8;
     ctx.stroke();
 }
