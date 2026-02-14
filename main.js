@@ -35,7 +35,7 @@ function checkAllImagesLoaded () {
         generateTriangles();
         initPlayer();
         setUpEventListeners();
-        render();
+        animate();
     }
 }
 
@@ -152,6 +152,7 @@ function setUpEventListeners () {
             isDragging = true;
             player.startDrag(pos.x, pos.y);
             canvas.style.cursor = 'grabbing';
+            player.showMoveIndocators(); // Afficher les indicateurs pendant le drag
         }
     });
 
@@ -161,7 +162,6 @@ function setUpEventListeners () {
 
         if (isDragging && player) {
             player.updateDrag(pos.x, pos.y);
-            render();
         } else {
             // Changer le curseur si on survole le joueur
             if (player && player.isPointInside(pos.x, pos.y)) {
@@ -197,9 +197,10 @@ function setUpEventListeners () {
         }
 
         // Si les indicateurs sont visibles, vérifier si le click est sur une case adjacente
+        let clickedCase = null;
         if (player && player.showMoveIndicators) {
             const adjacentCases = player.getAdjacentCases(triangles);
-            const clickedCase = adjacentCases.find(c => c.isPointInside(pos.x, pos.y));
+            clickedCase = adjacentCases.find(c => c.isPointInside(pos.x, pos.y));
         }
 
         if (clickedCase) {
@@ -216,4 +217,10 @@ function setUpEventListeners () {
     canvas.addEventListener('dragstart', (e) => {
         e.preventDefault();
     });
+}
+
+// Boucle d'animation pour render en permanance
+function animate() {
+    render();
+    requestAnimationFrame(animate);
 }

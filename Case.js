@@ -29,10 +29,10 @@ export class Case {
     }
 
     isPointInside(px, py) {
-        if (!px >= this.x) return false;
-        if (!px <= this.x + this.size) return false;
-        if (!py >= this.y) return false;
-        if (!py <= this.y + this.size) return false;
+        if (px < this.x) return false;
+        if (px > this.x + this.size) return false;
+        if (py < this.y) return false;
+        if (py > this.y + this.size) return false;
         return true;
     }
 }
