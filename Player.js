@@ -169,7 +169,7 @@ export class Player {
     this.showMoveIndicators = !this.showMoveIndicators;
   }
 
-  showMoveIndocators() {
+  showMoveIndicators() {
     this.showMoveIndicators = true;
   }
 

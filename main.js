@@ -152,7 +152,6 @@ function setUpEventListeners () {
             isDragging = true;
             player.startDrag(pos.x, pos.y);
             canvas.style.cursor = 'grabbing';
-            player.showMoveIndocators(); // Afficher les indicateurs pendant le drag
         }
     });
 
