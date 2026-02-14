@@ -1,4 +1,5 @@
 import {Case} from "./Case.js";
+import {Player} from "./Player.js";
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -21,14 +22,32 @@ const triangles = []; // Tableau pour stocker toutes les instances de Case
 const triangleImage = new Image();
 triangleImage.src = './assets/images/triangle.png';
 
+let player = null; // variable pour le joueur
+const playerImage = new Image();
+playerImage.src = './assets/images/player.png';
+
+let imagesLoaded = 0;
+const totalImages = 2; // triangle, player
+
+function checkAllImagesLoaded () {
+    imagesLoaded++;
+    if (imagesLoaded === totalImages) {
+        generateTriangles();
+        initPlayer();
+        setUpEventListeners();
+        render();
+    }
+}
+
 triangleImage.onerror = function() {
     console.error("Erreur de chargement de l'image du triangle.");
 }
-
-triangleImage.onload = function() {
-    generateTriangles();
-    drawBorder();
+playerImage.onerror = function() {
+    console.error("Erreur de chargement de l'image du joueur.");
 }
+
+triangleImage.onload = checkAllImagesLoaded;
+playerImage.onload = checkAllImagesLoaded;
 
 function generateTriangles () {
     // Générer un grand triangle inversé (base en haut, apex en bas)
@@ -84,4 +103,117 @@ function drawBorder() {
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 8;
     ctx.stroke();
+}
+
+function initPlayer() {
+    const initialCase = triangles[6];
+    player = new Player(initialCase, playerImage, canvas);
+    console.log("Joueur initialisé sur la case " + String(initialCase) + ".")
+}
+
+function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Dessiner les triangles
+    triangles.forEach(triangle => triangle.draw(ctx));
+
+    // Dessiner la bordure
+    drawBorder();
+
+    // Dessiner les indicateurs de mouvement
+    if (player) {
+        const adjacentCases = player.getAdjacentCases(triangles);
+        player.drawMoveIndicators(ctx, adjacentCases);
+    }
+
+    // Dessiner le joueur
+    if (player) {
+        player.draw(ctx);
+    }
+}
+
+function setUpEventListeners () {
+    let isDragging = false;
+
+    // Obtenir la position de la souris relaige au canvas
+    function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        }
+    }
+
+    // Mouse down
+    canvas.addEventListener('mousedown', (e) => {
+        const pos = getMousePos(e);
+
+        if (player && player.isPointInside(pos.x, pos.y)) {
+            isDragging = true;
+            player.startDrag(pos.x, pos.y);
+            canvas.style.cursor = 'grabbing';
+        }
+    });
+
+    // Mouse move
+    canvas.addEventListener('mousemove', (e) => {
+        const pos = getMousePos(e);
+
+        if (isDragging && player) {
+            player.updateDrag(pos.x, pos.y);
+            render();
+        } else {
+            // Changer le curseur si on survole le joueur
+            if (player && player.isPointInside(pos.x, pos.y)) {
+                canvas.style.cursor = 'grab';
+            } else {
+                canvas.style.cursor = 'default';
+            }
+        }
+    });
+
+    // Mouse up
+    canvas.addEventListener('mouseup', (e) => {
+        if (isDragging && player) {
+            const pos = getMousePos(e);
+            player.endDrag(pos.x, pos.y, triangles);
+            isDragging = false;
+            canvas.style.cursor = 'default';
+            render();
+        }
+    });
+
+    // click pour toggle les indicateurs de mouvement ou se deplacer
+    canvas.addEventListener('click', (e) => {
+        if (isDragging) return;
+
+        const pos = getMousePos(e);
+
+        // Si on clique sur le joueur, toggle les indicateurs de mouvement
+        if (player && player.isPointInside(pos.x, pos.y)) {
+            player.toggleMoveIndicators();
+            render();
+            return;
+        }
+
+        // Si les indicateurs sont visibles, vérifier si le click est sur une case adjacente
+        if (player && player.showMoveIndicators) {
+            const adjacentCases = player.getAdjacentCases(triangles);
+            const clickedCase = adjacentCases.find(c => c.isPointInside(pos.x, pos.y));
+        }
+
+        if (clickedCase) {
+            player.moveToCase(clickedCase);
+            player.hideMoveIndicators(); // cacher les indicateurs de mouvement
+            render();
+        } else {
+            player.hideMoveIndicators();
+            render();
+        }
+    });
+
+    // prevenir le drag par défaut du canvas
+    canvas.addEventListener('dragstart', (e) => {
+        e.preventDefault();
+    });
 }
